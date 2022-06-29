@@ -694,11 +694,16 @@ class operatorPanelUI(QDialog):
         self.viewCats_btn.clicked.connect(self.OpenViewCatUI)
         self.viewUsersShopCart_btn.clicked.connect(self.OpenViewHandelOrdersUI)
         self.viewDiscount_btn.clicked.connect(self.OpenViewDiscountsUI)
+        self.viewSalers_btn.clicked.connect(self.OpenViewSalersUI)
                     
         
     def HandelOperatorPanel_func(self,OperatorID,AllInfo):
         self.OperatorID = OperatorID
         self.AllOperatorInfo = AllInfo
+        
+    def OpenViewSalersUI(self):
+        self.viewSalers = viewSalersUI()
+        self.viewSalers.show()
         
     def OpenViewDiscountsUI(self):
         self.viewDiscounts = viewDiscountUI()
@@ -1320,7 +1325,6 @@ class viewEditOffersUI(QDialog):
             self.message.confirm_btn.clicked.connect(lambda x : self.closeMessageBox("edit"))
             self.message.show()
             
-            
     def closeMessageBox(self,message):
         if(message == "edit"):
             self.message.close()
@@ -1328,6 +1332,125 @@ class viewEditOffersUI(QDialog):
             self.window = viewDiscountUI()
             self.window.show()
             
+class viewSalersUI(QDialog):
+    def __init__(self):
+        super().__init__()
+        loadUi(os.getcwd()+"\\uiDesigns\\viewSalersUI.ui", self)
+        self.createDynamicInfo()
+        self.setFixedSize(self.width(),self.height())  
+        self.addNewSaler_btn.clicked.connect(self.OpenAddNewSalerUI)
+        
+    def createDynamicInfo(self):
+        operator = Operator()
+        operator.ViewSalersUI(self)
+        
+    def OpenAddNewSalerUI(self):
+        self.viewEditSalersUI = viewEditSalersUI()
+        self.viewEditSalersUI.label_2.setText("افزودن فروشنده جدید")
+        self.viewEditSalersUI.label_2.setStyleSheet("QLabel { font: 24pt 'B narm';}")
+        self.viewEditSalersUI.label_4.setHidden(True)
+        self.viewEditSalersUI.randomID_input.setHidden(True)
+        self.viewEditSalersUI.confirm_btn.setText("افزودن")
+        self.goToAddNewSaler()
+        self.viewEditSalersUI.show()    
+        
+    def goToAddNewSaler(self):
+        self.viewEditSalersUI.confirm_btn.clicked.connect(self.confirmAddNewSaler)
+        
+    def confirmAddNewSaler(self):
+        operator = Operator()
+        if(operator.AddNewSaler(self.viewEditSalersUI)):
+            self.message = MessgaeBoxUI()
+            self.message.message_lbl.setText(f"فروشنده جدید با موفقیت افزوده شد")
+            self.message.confirm_btn.setText("متوجه شدم")
+            self.message.confirm_btn.clicked.connect(lambda x : self.goToCloseMessageBox("create"))
+            self.message.show()
+        else:
+            self.message = MessgaeBoxUI()
+            self.message.message_lbl.setText(f"لطفا همه مقادیر را کامل کنید")
+            self.message.confirm_btn.setText("متوجه شدم")
+            self.message.confirm_btn.clicked.connect(lambda x : self.goToCloseMessageBox("wrong"))
+            self.message.show()
+        
+    def goToCloseMessageBox(self,message):
+        if(message == "create"):
+            self.message.close()
+            self.close()
+            self.viewEditSalersUI.close()
+            self.window = viewSalersUI()
+            self.window.show()
+        elif(message =="wrong"):
+            self.message.close()
+        elif(message == "DeleteSaler"):
+            self.message.close()
+            self.close()
+            self.window = viewSalersUI()
+            self.window.show()
+        
+    def goToEditSaler(self,objName):
+        findSalerID = objName.split("_")[1]
+        self.close()
+        self.window = viewEditSalersUI()
+        self.window.OpenEditUI(findSalerID)
+        self.window.show()
+        
+    def goToDeleteSaler(self,objName):
+        findSalerID = objName.split("_")[1]
+        findSalerName = db.SalerRepository.GetSalerNameByID(findSalerID)[0][0]
+        self.message = MessgaeBoxUI()
+        self.message.message_lbl.setText(f"آیا از حذف فروشنده {findSalerName} مطمن هستید؟")
+        self.message.confirm_btn.setText("بله")
+        self.message.confirm_btn.clicked.connect(lambda x : self.goToConfirmDeleteSaler(findSalerID))
+        self.message.show()
+        
+    def goToConfirmDeleteSaler(self,findSalerID):
+        self.message.close()
+        operator = Operator()
+        if(operator.DeleteSaler(findSalerID)):
+            self.message = MessgaeBoxUI()
+            self.message.message_lbl.setText(f"فروشنده با موفقیت حذف شد")
+            self.message.confirm_btn.setText("بستن")
+            self.message.confirm_btn.clicked.connect(lambda x : self.goToCloseMessageBox("DeleteSaler"))
+            self.message.show()
+        else:
+            self.message = MessgaeBoxUI()
+            self.message.message_lbl.setText(f"این فروشنده در حال حاظر درحال ارائه خدمات میباشد ، ابتدا محصولات وابسته به آن را ویرایش کنید")
+            self.message.message_lbl.setStyleSheet("QLabel { font: 15pt 'B narm';}")
+            self.message.confirm_btn.setText("بستن")
+            self.message.confirm_btn.clicked.connect(lambda x : self.goToCloseMessageBox("wrong"))
+            self.message.show()
+
+
+class viewEditSalersUI(QDialog):
+    def __init__(self):
+        super().__init__()
+        loadUi(os.getcwd()+"\\uiDesigns\\EditSalerUI.ui", self)
+        self.setFixedSize(self.width(),self.height())
+        
+    def OpenEditUI(self,salerID):
+        findSalerName = db.SalerRepository.GetSalerNameByID(salerID)[0][0]
+        findRandomID = db.SalerRepository.GetRandomIDByID(salerID)[0][0]
+        self.salerName_input.setText(f"{findSalerName}")
+        self.randomID_input.setText(f"{findRandomID}")
+        self.confirm_btn.clicked.connect(lambda x : self.goToConfirmEditSaler(salerID))
+        
+    def goToConfirmEditSaler(self,salerID):
+        operator = Operator()
+        if(operator.ConfirmEditSaler(salerID,self)):
+            self.message = MessgaeBoxUI()
+            self.message.message_lbl.setText(f"اطلاعات فروشنده با موفقیت ویرایش شد")
+            self.message.confirm_btn.setText("متوجه شدم")
+            self.message.confirm_btn.clicked.connect(lambda x : self.closeMessageBox("edit"))
+            self.message.show()
+            
+    def closeMessageBox(self,message):
+        if(message == "edit"):
+            self.message.close()
+            self.close()
+            self.window = viewSalersUI()
+            self.window.show()
+        
+
 app = QApplication(sys.argv)
 mainUI = mainWindowUI()
 sys.exit(app.exec_())

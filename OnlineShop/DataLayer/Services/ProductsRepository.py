@@ -33,6 +33,9 @@ class ProductsRepository(IProductsRepository):
     def GetAllByCatID(self,catID):
         return self.db.getData(f"SELECT * FROM products WHERE catID = {catID}")
     
+    def GetAllBySalerID(self,salerID):
+        return self.db.getData(f"SELECT * FROM products WHERE salerID = {salerID}")
+    
     def Create(self,product):
         self.db.runQuery("INSERT INTO products VALUES (NULL, ?, ?, ? ,?,?,?);", product.values())
         

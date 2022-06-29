@@ -7,6 +7,7 @@ from DataLayer.Tables.operatorTabels import operatorTabels
 from DataLayer.Tables.usersTable import userTable
 from DataLayer.Tables.catTable import catTable
 from DataLayer.Tables.productTable import productTable
+import random
 
 
 from PyQt5.QtWidgets import QLabel , QPushButton , QLineEdit
@@ -843,3 +844,126 @@ class Operator:
             return True
         else:
             return False
+        
+    def ViewSalersUI(self,instance):
+        getAllSalers = db.SalerRepository.GetAll()
+        salerName_dict = {}
+        randomID_dict = {}
+        editlbl_dict = {}
+        editbtn_dict = {}
+        deletelbl_dict = {}
+        deletebtn_dict = {}
+        index = 0
+        height = 140
+        for i in getAllSalers:
+            id = i[0]
+            name = i[1]
+            randomID = i[2]
+            
+            # --- offerName
+            salerName_dict[index] = QLabel(instance)
+            salerName_dict[index].setText(f"نام: {name}")
+            salerName_dict[index].setStyleSheet("QLabel { font: 14pt 'B Nazanin';}")
+            salerName_dict[index].setGeometry(390,height,181,51)
+            salerName_dict[index].setObjectName(f"offerName_{id}")
+            # --- discount
+            randomID_dict[index] = QLabel(instance)
+            randomID_dict[index].setText(f"شناسه : {randomID}")
+            randomID_dict[index].setStyleSheet("QLabel { font: 14pt 'B Nazanin';}")
+            randomID_dict[index].setGeometry(160,height,201,51)
+            randomID_dict[index].setObjectName(f"discount_{id}")
+            # --- edit_lbl
+            editlbl_dict[index] = QLabel(instance)
+            editlbl_dict[index].setGeometry(90,height,51,51)
+            editlbl_dict[index].setObjectName(f"editlbl_{id}")
+            img = QPixmap(os.getcwd()+"\\Tools\\imgs\\editIcon.jpg")
+            editlbl_dict[index].setPixmap(img)
+            # ---edit_btn
+            editbtn_dict[index] = QPushButton(instance)
+            editbtn_dict[index].setGeometry(90,height,51,51)
+            editbtn_dict[index].setObjectName(f"editbtn_{id}")
+            editbtn_dict[index].setStyleSheet("QPushButton { background-color : transparent; border : none;}")
+            editbtn_dict[index].setCursor(Qt.PointingHandCursor)
+            # --- delete_lbl
+            deletelbl_dict[index] = QLabel(instance)
+            deletelbl_dict[index].setGeometry(30,height,51,51)
+            deletelbl_dict[index].setObjectName(f"deletelbl_{id}")
+            img = QPixmap(os.getcwd()+"\\Tools\\imgs\\deleteIcon.jpg")
+            deletelbl_dict[index].setPixmap(img)
+            # ---delete_btn
+            deletebtn_dict[index] = QPushButton(instance)
+            deletebtn_dict[index].setGeometry(30,height,51,51)
+            deletebtn_dict[index].setObjectName(f"deletebtn_{id}")
+            deletebtn_dict[index].setStyleSheet("QPushButton { background-color : transparent; border : none;}")
+            deletebtn_dict[index].setCursor(Qt.PointingHandCursor)
+            # -----
+            index += 1
+            height += 60
+            
+        num = len(editbtn_dict)
+        for i in range(num,20):
+            editbtn_dict[i] = QPushButton(instance)
+            editbtn_dict[i].setHidden(True)  
+            
+        num = len(deletebtn_dict)
+        for i in range(num,20):
+            deletebtn_dict[i] = QPushButton(instance)
+            deletebtn_dict[i].setHidden(True)
+            
+
+            
+        editbtn_dict[0].clicked.connect(lambda: instance.goToEditSaler(editbtn_dict[0].objectName()))
+        editbtn_dict[1].clicked.connect(lambda: instance.goToEditSaler(editbtn_dict[1].objectName()))
+        editbtn_dict[2].clicked.connect(lambda: instance.goToEditSaler(editbtn_dict[2].objectName()))
+        editbtn_dict[3].clicked.connect(lambda: instance.goToEditSaler(editbtn_dict[3].objectName()))
+        editbtn_dict[4].clicked.connect(lambda: instance.goToEditSaler(editbtn_dict[4].objectName()))
+        editbtn_dict[5].clicked.connect(lambda: instance.goToEditSaler(editbtn_dict[5].objectName()))
+        editbtn_dict[6].clicked.connect(lambda: instance.goToEditSaler(editbtn_dict[6].objectName()))
+        editbtn_dict[7].clicked.connect(lambda: instance.goToEditSaler(editbtn_dict[7].objectName()))
+        editbtn_dict[8].clicked.connect(lambda: instance.goToEditSaler(editbtn_dict[8].objectName()))
+        editbtn_dict[9].clicked.connect(lambda: instance.goToEditSaler(editbtn_dict[9].objectName()))
+        editbtn_dict[10].clicked.connect(lambda: instance.goToEditSaler(editbtn_dict[10].objectName()))
+        
+        deletebtn_dict[0].clicked.connect(lambda: instance.goToDeleteSaler(deletebtn_dict[0].objectName()))
+        deletebtn_dict[1].clicked.connect(lambda: instance.goToDeleteSaler(deletebtn_dict[1].objectName()))
+        deletebtn_dict[2].clicked.connect(lambda: instance.goToDeleteSaler(deletebtn_dict[2].objectName()))
+        deletebtn_dict[3].clicked.connect(lambda: instance.goToDeleteSaler(deletebtn_dict[3].objectName()))
+        deletebtn_dict[4].clicked.connect(lambda: instance.goToDeleteSaler(deletebtn_dict[4].objectName()))
+        deletebtn_dict[5].clicked.connect(lambda: instance.goToDeleteSaler(deletebtn_dict[5].objectName()))
+        deletebtn_dict[6].clicked.connect(lambda: instance.goToDeleteSaler(deletebtn_dict[6].objectName()))
+        deletebtn_dict[7].clicked.connect(lambda: instance.goToDeleteSaler(deletebtn_dict[7].objectName()))
+        deletebtn_dict[8].clicked.connect(lambda: instance.goToDeleteSaler(deletebtn_dict[8].objectName()))
+        deletebtn_dict[9].clicked.connect(lambda: instance.goToDeleteSaler(deletebtn_dict[9].objectName()))
+        deletebtn_dict[10].clicked.connect(lambda: instance.goToDeleteSaler(deletebtn_dict[10].objectName()))
+        
+    def ConfirmEditSaler(self,salerID,instance):
+        getSalerNameText = instance.salerName_input.text()
+        getSalerRandomIDText = instance.randomID_input.text()
+        db.SalerRepository.UpdateWithOutInstance(salerID,getSalerNameText,getSalerRandomIDText)
+        db.SalerRepository.Save()
+        return True
+    
+    def AddNewSaler(self,instance):
+        salerName = instance.salerName_input.text()
+        numbers_list = [0,1,2,3,4,5,6,7,8,9]
+        random_list = []
+        for i in range(6):
+            random_list.append(f"{random.choice(numbers_list)}")
+        randomID = "SL"+"".join(random_list)
+        if(salerName != ""):
+            db.SalerRepository.CreateWithOutInstance(salerName,randomID)
+            db.SalerRepository.Save()
+            return True
+        else:
+            return False
+        
+    def DeleteSaler(self,salerID):
+        findProduct = db.ProductsRepository.GetAllBySalerID(salerID)
+        if(findProduct == []):
+            db.SalerRepository.DeleteWithOutInstance(salerID)
+            db.SalerRepository.Save()
+            return True
+        else:
+            return False
+    
+    
