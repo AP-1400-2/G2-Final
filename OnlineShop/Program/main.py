@@ -4,6 +4,7 @@ from PyQt5.QtCore import Qt
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QDialog , QApplication , QWidget , QStackedWidget , QLabel , QPushButton
 from datetime import datetime
+import webbrowser
 
 # --------------
 # own Maduls
@@ -33,8 +34,24 @@ class mainWindowUI(QDialog):
         self.productDetails_btn_2.clicked.connect(lambda x : self.ProductDetailsBeforeLoginUI(2))
         self.productDetails_btn_3.clicked.connect(lambda x : self.ProductDetailsBeforeLoginUI(3))
         self.productDetails_btn_4.clicked.connect(lambda x : self.ProductDetailsBeforeLoginUI(4))
+        # social btns
+        self.instagram_btn.clicked.connect(lambda x : self.goToSocial(self.instagram_btn.objectName()))
+        self.twitter_btn.clicked.connect(lambda x : self.goToSocial(self.twitter_btn.objectName()))
+        self.linkedin_btn.clicked.connect(lambda x : self.goToSocial(self.linkedin_btn.objectName()))
+        self.aparat_btn.clicked.connect(lambda x : self.goToSocial(self.aparat_btn.objectName()))
         self.show()
-        
+    
+    def goToSocial(self,objName):
+        getSocial = objName.split("_")[0]
+        if(getSocial == "instagram"):
+            webbrowser.open_new_tab("https://www.instagram.com/digikalacom/")
+        elif(getSocial == "twitter"):
+            webbrowser.open_new_tab("https://twitter.com/digikalacom")
+        elif(getSocial == "linkedin"):
+            webbrowser.open_new_tab("https://www.linkedin.com/company/digikala/mycompany/")
+        elif(getSocial == "aparat"):
+            webbrowser.open_new_tab("https://www.aparat.com/digikala/")
+            
     def OpenLoginWindowUI(self):
         self.close()
         self.window = LoginWindowUI()
