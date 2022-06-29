@@ -581,9 +581,131 @@ class Operator:
         
         return True
     
-    def ConfirmUserShopCart(self):
-        pass
-    
+    def ConfirmUserShopCart(self,instance):
+        getAllNotConfirmOrders = db.OperatorConfirmOrderRepository.GetAllNotConfirm()
+        radif_dict = {}
+        nameAndFamily_dict = {}
+        userName_dict = {}
+        orderID_dict = {}
+        totalPrice_dict = {}
+        confirmStatus_lbl = {}
+        confirmStatus_btn = {}
+        ignoreStatus_lbl = {}
+        ignoreStatus_btn = {}
+        index = 0
+        height = 230
+        if(getAllNotConfirmOrders != []):
+            for i in getAllNotConfirmOrders:
+                userID =i[1]
+                buyID = i[2]
+                status = i[3]
+                findName = db.UserPaymentRepository.GetNameByUserAndBuyID(userID,buyID)[0][0]
+                findFamily = db.UserPaymentRepository.GetFamilyByUserAndBuyID(userID,buyID)[0][0]
+                findUserName = db.userRepository.GetUserNameByID(userID)[0][0]
+                findTotalPrice = db.UserPaymentRepository.GetTotalPriceByUserAndBuyID(userID,buyID)[0][0]
+                # ---radif_btn
+                radif_dict[index] = QPushButton(instance)
+                radif_dict[index].setText(f"{index}")
+                radif_dict[index].setStyleSheet("QPushButton { border:1px solid #000;background-color  : transparent; text-align:center}")
+                radif_dict[index].setGeometry(820,height,81,71)
+                radif_dict[index].setObjectName(f"radift_{userID}|{buyID}")
+                # ---nameAndFamily_btn
+                nameAndFamily_dict[index] = QPushButton(instance)
+                nameAndFamily_dict[index].setText(f"{findName} {findFamily}")
+                nameAndFamily_dict[index].setStyleSheet("QPushButton { border:1px solid #000;background-color  : transparent; text-align:center}")
+                nameAndFamily_dict[index].setGeometry(700,height,121,71)
+                nameAndFamily_dict[index].setObjectName(f"nameAndFamily_{userID}|{buyID}")
+                # ---userName_btn
+                userName_dict[index] = QPushButton(instance)
+                userName_dict[index].setText(f"{findUserName}")
+                userName_dict[index].setStyleSheet("QPushButton { border:1px solid #000;background-color  : transparent; text-align:center}")
+                userName_dict[index].setGeometry(580,height,121,71)
+                userName_dict[index].setObjectName(f"userName_{userID}|{buyID}")
+                # ---orderID_btn
+                orderID_dict[index] = QPushButton(instance)
+                orderID_dict[index].setText(f"{buyID}")
+                orderID_dict[index].setStyleSheet("QPushButton { border:1px solid #000;background-color  : transparent; text-align:center}")
+                orderID_dict[index].setGeometry(450,height,131,71)
+                orderID_dict[index].setObjectName(f"orderID_{userID}|{buyID}")
+                # ---orderID_btn
+                totalPrice_dict[index] = QPushButton(instance)
+                totalPrice_dict[index].setText(f"{findTotalPrice}")
+                totalPrice_dict[index].setStyleSheet("QPushButton { border:1px solid #000;background-color  : transparent; text-align:center}")
+                totalPrice_dict[index].setGeometry(320,height,131,71)
+                totalPrice_dict[index].setObjectName(f"totalPrice_{userID}|{buyID}")
+                # ---confirmStatus_lbl
+                confirmStatus_lbl[index] = QLabel(instance)
+                confirmStatus_lbl[index].setGeometry(260,height+10,51,51)
+                confirmStatus_lbl[index].setObjectName(f"confirmlbl_{userID}|{buyID}")
+                img = QPixmap(os.getcwd()+"\\Tools\\imgs\\confirmIcon.jpg")
+                confirmStatus_lbl[index].setPixmap(img)
+                # ---confirmStatus_btn
+                confirmStatus_btn[index] = QPushButton(instance)
+                confirmStatus_btn[index].setGeometry(260,height+10,51,51)
+                confirmStatus_btn[index].setObjectName(f"confirmbtn_{userID}|{buyID}")
+                confirmStatus_btn[index].setStyleSheet("QPushButton { background-color : transparent; border : none;}")
+                confirmStatus_btn[index].setCursor(Qt.PointingHandCursor)
+                # ---ignoreStatus_lbl
+                ignoreStatus_lbl[index] = QLabel(instance)
+                ignoreStatus_lbl[index].setGeometry(200,height+10,51,51)
+                ignoreStatus_lbl[index].setObjectName(f"ignorelbl_{userID}|{buyID}")
+                img = QPixmap(os.getcwd()+"\\Tools\\imgs\\deleteIcon.jpg")
+                ignoreStatus_lbl[index].setPixmap(img)
+                # ---ignoreStatus_btn
+                ignoreStatus_btn[index] = QPushButton(instance)
+                ignoreStatus_btn[index].setGeometry(200,height+10,51,51)
+                ignoreStatus_btn[index].setObjectName(f"ignorebtn_{userID}|{buyID}")
+                ignoreStatus_btn[index].setStyleSheet("QPushButton { background-color : transparent; border : none;}")
+                ignoreStatus_btn[index].setCursor(Qt.PointingHandCursor)
+                # ----
+                index += 1
+                height += 70
+                
+            num = len(confirmStatus_btn)
+            for i in range(num,20):
+                confirmStatus_btn[i] = QPushButton(instance)
+                confirmStatus_btn[i].setHidden(True)
+                
+            num = len(ignoreStatus_btn)
+            for i in range(num,20):
+                ignoreStatus_btn[i] = QPushButton(instance)
+                ignoreStatus_btn[i].setHidden(True)
+                
+            confirmStatus_btn[0].clicked.connect(lambda: instance.goToConfrimOrder(confirmStatus_btn[0].objectName()))
+            confirmStatus_btn[1].clicked.connect(lambda: instance.goToConfrimOrder(confirmStatus_btn[1].objectName()))
+            confirmStatus_btn[2].clicked.connect(lambda: instance.goToConfrimOrder(confirmStatus_btn[2].objectName()))
+            confirmStatus_btn[3].clicked.connect(lambda: instance.goToConfrimOrder(confirmStatus_btn[3].objectName()))
+            confirmStatus_btn[4].clicked.connect(lambda: instance.goToConfrimOrder(confirmStatus_btn[4].objectName()))
+            confirmStatus_btn[5].clicked.connect(lambda: instance.goToConfrimOrder(confirmStatus_btn[5].objectName()))
+            confirmStatus_btn[6].clicked.connect(lambda: instance.goToConfrimOrder(confirmStatus_btn[6].objectName()))
+            confirmStatus_btn[7].clicked.connect(lambda: instance.goToConfrimOrder(confirmStatus_btn[7].objectName()))
+            confirmStatus_btn[8].clicked.connect(lambda: instance.goToConfrimOrder(confirmStatus_btn[8].objectName()))
+            confirmStatus_btn[9].clicked.connect(lambda: instance.goToConfrimOrder(confirmStatus_btn[9].objectName()))
+            confirmStatus_btn[10].clicked.connect(lambda: instance.goToConfrimOrder(confirmStatus_btn[10].objectName()))
+            
+            ignoreStatus_btn[0].clicked.connect(lambda: instance.goToIgnoreOrder(ignoreStatus_btn[0].objectName()))
+            ignoreStatus_btn[1].clicked.connect(lambda: instance.goToIgnoreOrder(ignoreStatus_btn[1].objectName()))
+            ignoreStatus_btn[2].clicked.connect(lambda: instance.goToIgnoreOrder(ignoreStatus_btn[2].objectName()))
+            ignoreStatus_btn[3].clicked.connect(lambda: instance.goToIgnoreOrder(ignoreStatus_btn[3].objectName()))
+            ignoreStatus_btn[4].clicked.connect(lambda: instance.goToIgnoreOrder(ignoreStatus_btn[4].objectName()))
+            ignoreStatus_btn[5].clicked.connect(lambda: instance.goToIgnoreOrder(ignoreStatus_btn[5].objectName()))
+            ignoreStatus_btn[6].clicked.connect(lambda: instance.goToIgnoreOrder(ignoreStatus_btn[6].objectName()))
+            ignoreStatus_btn[7].clicked.connect(lambda: instance.goToIgnoreOrder(ignoreStatus_btn[7].objectName()))
+            ignoreStatus_btn[8].clicked.connect(lambda: instance.goToIgnoreOrder(ignoreStatus_btn[8].objectName()))
+            ignoreStatus_btn[9].clicked.connect(lambda: instance.goToIgnoreOrder(ignoreStatus_btn[9].objectName()))
+            ignoreStatus_btn[10].clicked.connect(lambda: instance.goToIgnoreOrder(ignoreStatus_btn[10].objectName()))
+
+
+
+                
+        else:
+            # --->notOrderYet!
+            notOrderYet = QPushButton(instance)
+            notOrderYet.setText("هنوز سفارش جدیدی ثبت نشده است")
+            notOrderYet.setStyleSheet("QPushButton { border:1px solid #000;background-color  : transparent; text-align:center}")
+            notOrderYet.setGeometry(110,220,911,501)
+            notOrderYet.setObjectName(f"notOrderYet")
+        
     def ConfrimDeleteUser(self,userID):
         findAllUserInfo = db.userRepository.GetByID(userID)
         userName = findAllUserInfo[0][1]
@@ -596,3 +718,130 @@ class Operator:
         db.userRepository.Save()
         return True
     
+    def goToSendOrder(self,userID,buyID):
+        # Update status to 1
+        db.OperatorConfirmOrderRepository.UpdateConfrimOrder(userID,buyID)
+        db.OperatorConfirmOrderRepository.Save()
+        return True
+        
+    def goToIgnoreOrder(self,userID,buyID):
+        # Update Status to 2
+        db.OperatorConfirmOrderRepository.UpdateIgnoreOrder(userID,buyID)
+        db.OperatorConfirmOrderRepository.Save()
+        # ---------
+        findTotalPrice = db.UserPaymentRepository.GetTotalPriceByUserAndBuyID(userID,buyID)[0][0]
+        findUserBalance = db.userBalanceRepository.GetBalance(userID)[0][0]
+        # --------
+        # restore Balance
+        RestoreBalance = findTotalPrice + findUserBalance
+        db.userBalanceRepository.UpdateWithOutInstance(userID,RestoreBalance)
+        db.userBalanceRepository.Save()
+        return True
+    
+    def viewDiscountUI(self,instance):
+        getAllOffers = db.OffersRepository.GetAll()
+        OfferName_dict = {}
+        discount_dict = {}
+        editlbl_dict = {}
+        editbtn_dict = {}
+        deletelbl_dict = {}
+        deletebtn_dict = {}
+        index = 0
+        height = 140
+        for i in getAllOffers[1:]:
+            id = i[0]
+            name = i[1]
+            discount = i[2]
+            
+            # --- offerName
+            OfferName_dict[index] = QLabel(instance)
+            OfferName_dict[index].setText(f"کد تخفیف : {name}")
+            OfferName_dict[index].setStyleSheet("QLabel { font: 15pt 'B Nazanin';}")
+            OfferName_dict[index].setGeometry(390,height,181,51)
+            OfferName_dict[index].setObjectName(f"offerName_{id}")
+            # --- discount
+            discount_dict[index] = QLabel(instance)
+            discount_dict[index].setText(f"مقدار تخفیف : {discount} درصد")
+            discount_dict[index].setStyleSheet("QLabel { font: 15pt 'B Nazanin';}")
+            discount_dict[index].setGeometry(160,height,201,51)
+            discount_dict[index].setObjectName(f"discount_{id}")
+            # --- edit_lbl
+            editlbl_dict[index] = QLabel(instance)
+            editlbl_dict[index].setGeometry(90,height,51,51)
+            editlbl_dict[index].setObjectName(f"editlbl_{id}")
+            img = QPixmap(os.getcwd()+"\\Tools\\imgs\\editIcon.jpg")
+            editlbl_dict[index].setPixmap(img)
+            # ---edit_btn
+            editbtn_dict[index] = QPushButton(instance)
+            editbtn_dict[index].setGeometry(90,height,51,51)
+            editbtn_dict[index].setObjectName(f"editbtn_{id}")
+            editbtn_dict[index].setStyleSheet("QPushButton { background-color : transparent; border : none;}")
+            editbtn_dict[index].setCursor(Qt.PointingHandCursor)
+            # --- delete_lbl
+            deletelbl_dict[index] = QLabel(instance)
+            deletelbl_dict[index].setGeometry(30,height,51,51)
+            deletelbl_dict[index].setObjectName(f"deletelbl_{id}")
+            img = QPixmap(os.getcwd()+"\\Tools\\imgs\\deleteIcon.jpg")
+            deletelbl_dict[index].setPixmap(img)
+            # ---delete_btn
+            deletebtn_dict[index] = QPushButton(instance)
+            deletebtn_dict[index].setGeometry(30,height,51,51)
+            deletebtn_dict[index].setObjectName(f"deletebtn_{id}")
+            deletebtn_dict[index].setStyleSheet("QPushButton { background-color : transparent; border : none;}")
+            deletebtn_dict[index].setCursor(Qt.PointingHandCursor)
+            # -----
+            index += 1
+            height += 60
+            
+        num = len(editbtn_dict)
+        for i in range(num,20):
+            editbtn_dict[i] = QPushButton(instance)
+            editbtn_dict[i].setHidden(True)  
+            
+        num = len(deletebtn_dict)
+        for i in range(num,20):
+            deletebtn_dict[i] = QPushButton(instance)
+            deletebtn_dict[i].setHidden(True)
+            
+
+            
+        editbtn_dict[0].clicked.connect(lambda: instance.goToEditOffer(editbtn_dict[0].objectName()))
+        editbtn_dict[1].clicked.connect(lambda: instance.goToEditOffer(editbtn_dict[1].objectName()))
+        editbtn_dict[2].clicked.connect(lambda: instance.goToEditOffer(editbtn_dict[2].objectName()))
+        editbtn_dict[3].clicked.connect(lambda: instance.goToEditOffer(editbtn_dict[3].objectName()))
+        editbtn_dict[4].clicked.connect(lambda: instance.goToEditOffer(editbtn_dict[4].objectName()))
+        editbtn_dict[5].clicked.connect(lambda: instance.goToEditOffer(editbtn_dict[5].objectName()))
+        editbtn_dict[6].clicked.connect(lambda: instance.goToEditOffer(editbtn_dict[6].objectName()))
+        editbtn_dict[7].clicked.connect(lambda: instance.goToEditOffer(editbtn_dict[7].objectName()))
+        editbtn_dict[8].clicked.connect(lambda: instance.goToEditOffer(editbtn_dict[8].objectName()))
+        editbtn_dict[9].clicked.connect(lambda: instance.goToEditOffer(editbtn_dict[9].objectName()))
+        editbtn_dict[10].clicked.connect(lambda: instance.goToEditOffer(editbtn_dict[10].objectName()))
+
+        deletebtn_dict[0].clicked.connect(lambda: instance.goToDeleteOffer(deletebtn_dict[0].objectName()))
+        deletebtn_dict[1].clicked.connect(lambda: instance.goToDeleteOffer(deletebtn_dict[1].objectName()))
+        deletebtn_dict[2].clicked.connect(lambda: instance.goToDeleteOffer(deletebtn_dict[2].objectName()))
+        deletebtn_dict[3].clicked.connect(lambda: instance.goToDeleteOffer(deletebtn_dict[3].objectName()))
+        deletebtn_dict[4].clicked.connect(lambda: instance.goToDeleteOffer(deletebtn_dict[4].objectName()))
+        deletebtn_dict[5].clicked.connect(lambda: instance.goToDeleteOffer(deletebtn_dict[5].objectName()))
+        deletebtn_dict[6].clicked.connect(lambda: instance.goToDeleteOffer(deletebtn_dict[6].objectName()))
+        deletebtn_dict[7].clicked.connect(lambda: instance.goToDeleteOffer(deletebtn_dict[7].objectName()))
+        deletebtn_dict[8].clicked.connect(lambda: instance.goToDeleteOffer(deletebtn_dict[8].objectName()))
+        deletebtn_dict[9].clicked.connect(lambda: instance.goToDeleteOffer(deletebtn_dict[9].objectName()))
+        deletebtn_dict[10].clicked.connect(lambda: instance.goToDeleteOffer(deletebtn_dict[10].objectName()))
+    
+    def ConfirmEditOffer(self,offerID,instance):
+        getOfferText = instance.offer_input.text()
+        getOfferdiscount = instance.discount_input.text()
+        db.OffersRepository.Update(offerID,getOfferText,getOfferdiscount)
+        db.OffersRepository.Save()
+        return True
+    
+    def AddNewOffer(self,instance):
+        offName = instance.offer_input.text()
+        discount = instance.discount_input.text()
+        if(offName != "" and discount != ""):
+            db.OffersRepository.Create(offName,discount)
+            db.OffersRepository.Save()
+            return True
+        else:
+            return False

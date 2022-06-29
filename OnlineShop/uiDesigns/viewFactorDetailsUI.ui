@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1127</width>
-    <height>816</height>
+    <height>881</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -34,12 +34,12 @@ background-color : #fff
     <string>مشاهده جزئیات فاکتور خرید</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_2">
+  <widget class="QLabel" name="factorIndex_lbl">
    <property name="geometry">
     <rect>
-     <x>160</x>
+     <x>10</x>
      <y>80</y>
-     <width>151</width>
+     <width>301</width>
      <height>41</height>
     </rect>
    </property>
@@ -50,12 +50,12 @@ background-color : #fff
     <string>شماره فاکتور :</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_3">
+  <widget class="QLabel" name="date_lbl">
    <property name="geometry">
     <rect>
-     <x>150</x>
+     <x>10</x>
      <y>120</y>
-     <width>161</width>
+     <width>301</width>
      <height>41</height>
     </rect>
    </property>
@@ -66,12 +66,12 @@ background-color : #fff
     <string>تاریخ ثبت سفارش :</string>
    </property>
   </widget>
-  <widget class="QLabel" name="label_4">
+  <widget class="QLabel" name="totalPrice_lbl">
    <property name="geometry">
     <rect>
-     <x>140</x>
-     <y>750</y>
-     <width>161</width>
+     <x>10</x>
+     <y>830</y>
+     <width>291</width>
      <height>41</height>
     </rect>
    </property>
@@ -371,7 +371,7 @@ background-color: rgb(191, 204, 203);</string>
     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
    </property>
   </widget>
-  <widget class="QLabel" name="count_lbl_2">
+  <widget class="QLabel" name="orderName_lbl">
    <property name="geometry">
     <rect>
      <x>770</x>
@@ -387,7 +387,7 @@ background-color: rgb(191, 204, 203);</string>
     <string>سفارش به نام : علیرضا حسینی</string>
    </property>
   </widget>
-  <widget class="QLabel" name="count_lbl_3">
+  <widget class="QLabel" name="mobile_lbl">
    <property name="geometry">
     <rect>
      <x>770</x>
@@ -401,6 +401,42 @@ background-color: rgb(191, 204, 203);</string>
    </property>
    <property name="text">
     <string>شماره تماس : 09124567891</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>10</y>
+     <width>55</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap>../Tools/imgs/backIcon2.jpg</pixmap>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="back_btn">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>71</width>
+     <height>61</height>
+    </rect>
+   </property>
+   <property name="cursor">
+    <cursorShape>PointingHandCursor</cursorShape>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color : transparent;
+border : none</string>
+   </property>
+   <property name="text">
+    <string/>
    </property>
   </widget>
  </widget>

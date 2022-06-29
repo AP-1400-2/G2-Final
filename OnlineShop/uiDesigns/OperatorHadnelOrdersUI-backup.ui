@@ -37,7 +37,7 @@ background-color : #fff
   <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>770</x>
+     <x>700</x>
      <y>140</y>
      <width>121</width>
      <height>71</height>
@@ -54,7 +54,7 @@ background-color: rgb(191, 204, 203);</string>
   <widget class="QPushButton" name="pushButton_2">
    <property name="geometry">
     <rect>
-     <x>650</x>
+     <x>580</x>
      <y>140</y>
      <width>121</width>
      <height>71</height>
@@ -71,7 +71,7 @@ background-color: rgb(191, 204, 203);</string>
   <widget class="QPushButton" name="pushButton_3">
    <property name="geometry">
     <rect>
-     <x>520</x>
+     <x>450</x>
      <y>140</y>
      <width>131</width>
      <height>71</height>
@@ -88,7 +88,7 @@ background-color: rgb(191, 204, 203);</string>
   <widget class="QPushButton" name="pushButton_5">
    <property name="geometry">
     <rect>
-     <x>390</x>
+     <x>320</x>
      <y>140</y>
      <width>131</width>
      <height>71</height>
@@ -105,7 +105,7 @@ background-color: rgb(191, 204, 203);</string>
   <widget class="QPushButton" name="pushButton_4">
    <property name="geometry">
     <rect>
-     <x>890</x>
+     <x>820</x>
      <y>140</y>
      <width>81</width>
      <height>71</height>
@@ -119,27 +119,10 @@ background-color: rgb(191, 204, 203);</string>
     <string>ردیف</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_6">
-   <property name="geometry">
-    <rect>
-     <x>260</x>
-     <y>140</y>
-     <width>131</width>
-     <height>71</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">border:1px solid #000;
-background-color: rgb(191, 204, 203);</string>
-   </property>
-   <property name="text">
-    <string>جزئیات سفارش</string>
-   </property>
-  </widget>
   <widget class="QPushButton" name="pushButton_10">
    <property name="geometry">
     <rect>
-     <x>890</x>
+     <x>820</x>
      <y>210</y>
      <width>81</width>
      <height>71</height>
@@ -156,7 +139,7 @@ background-color: #fff;</string>
   <widget class="QPushButton" name="pushButton_11">
    <property name="geometry">
     <rect>
-     <x>770</x>
+     <x>700</x>
      <y>210</y>
      <width>121</width>
      <height>71</height>
@@ -170,27 +153,10 @@ background-color: #fff;</string>
     <string>نام محصول</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_12">
-   <property name="geometry">
-    <rect>
-     <x>260</x>
-     <y>210</y>
-     <width>131</width>
-     <height>71</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">border:1px solid #000;
-background-color: #fff;</string>
-   </property>
-   <property name="text">
-    <string>جزئیات سفارش</string>
-   </property>
-  </widget>
   <widget class="QPushButton" name="pushButton_16">
    <property name="geometry">
     <rect>
-     <x>390</x>
+     <x>320</x>
      <y>210</y>
      <width>131</width>
      <height>71</height>
@@ -207,7 +173,7 @@ background-color: #fff;</string>
   <widget class="QPushButton" name="pushButton_17">
    <property name="geometry">
     <rect>
-     <x>520</x>
+     <x>450</x>
      <y>210</y>
      <width>131</width>
      <height>71</height>
@@ -224,7 +190,7 @@ background-color: #fff;</string>
   <widget class="QPushButton" name="pushButton_18">
    <property name="geometry">
     <rect>
-     <x>650</x>
+     <x>580</x>
      <y>210</y>
      <width>121</width>
      <height>71</height>
@@ -241,7 +207,7 @@ background-color: #fff;</string>
   <widget class="QPushButton" name="pushButton_19">
    <property name="geometry">
     <rect>
-     <x>390</x>
+     <x>320</x>
      <y>280</y>
      <width>131</width>
      <height>71</height>
@@ -255,27 +221,10 @@ background-color: #fff;</string>
     <string>قیمت (تومان)</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_20">
-   <property name="geometry">
-    <rect>
-     <x>260</x>
-     <y>280</y>
-     <width>131</width>
-     <height>71</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">border:1px solid #000;
-background-color: #fff;</string>
-   </property>
-   <property name="text">
-    <string>جزئیات سفارش</string>
-   </property>
-  </widget>
   <widget class="QPushButton" name="pushButton_21">
    <property name="geometry">
     <rect>
-     <x>770</x>
+     <x>700</x>
      <y>280</y>
      <width>121</width>
      <height>71</height>
@@ -292,7 +241,7 @@ background-color: #fff;</string>
   <widget class="QPushButton" name="pushButton_22">
    <property name="geometry">
     <rect>
-     <x>520</x>
+     <x>450</x>
      <y>280</y>
      <width>131</width>
      <height>71</height>
@@ -309,7 +258,7 @@ background-color: #fff;</string>
   <widget class="QPushButton" name="pushButton_23">
    <property name="geometry">
     <rect>
-     <x>650</x>
+     <x>580</x>
      <y>280</y>
      <width>121</width>
      <height>71</height>
@@ -326,7 +275,7 @@ background-color: #fff;</string>
   <widget class="QPushButton" name="pushButton_26">
    <property name="geometry">
     <rect>
-     <x>890</x>
+     <x>820</x>
      <y>280</y>
      <width>81</width>
      <height>71</height>
@@ -343,7 +292,7 @@ background-color: #fff;</string>
   <widget class="QPushButton" name="pushButton_28">
    <property name="geometry">
     <rect>
-     <x>770</x>
+     <x>700</x>
      <y>420</y>
      <width>121</width>
      <height>71</height>
@@ -360,7 +309,7 @@ background-color: #fff;</string>
   <widget class="QPushButton" name="pushButton_29">
    <property name="geometry">
     <rect>
-     <x>890</x>
+     <x>820</x>
      <y>420</y>
      <width>81</width>
      <height>71</height>
@@ -377,7 +326,7 @@ background-color: #fff;</string>
   <widget class="QPushButton" name="pushButton_30">
    <property name="geometry">
     <rect>
-     <x>650</x>
+     <x>580</x>
      <y>420</y>
      <width>121</width>
      <height>71</height>
@@ -394,7 +343,7 @@ background-color: #fff;</string>
   <widget class="QPushButton" name="pushButton_31">
    <property name="geometry">
     <rect>
-     <x>390</x>
+     <x>320</x>
      <y>350</y>
      <width>131</width>
      <height>71</height>
@@ -411,7 +360,7 @@ background-color: #fff;</string>
   <widget class="QPushButton" name="pushButton_33">
    <property name="geometry">
     <rect>
-     <x>770</x>
+     <x>700</x>
      <y>350</y>
      <width>121</width>
      <height>71</height>
@@ -428,7 +377,7 @@ background-color: #fff;</string>
   <widget class="QPushButton" name="pushButton_34">
    <property name="geometry">
     <rect>
-     <x>520</x>
+     <x>450</x>
      <y>350</y>
      <width>131</width>
      <height>71</height>
@@ -445,7 +394,7 @@ background-color: #fff;</string>
   <widget class="QPushButton" name="pushButton_38">
    <property name="geometry">
     <rect>
-     <x>650</x>
+     <x>580</x>
      <y>350</y>
      <width>121</width>
      <height>71</height>
@@ -459,44 +408,10 @@ background-color: #fff;</string>
     <string>کد محصول</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton_41">
-   <property name="geometry">
-    <rect>
-     <x>260</x>
-     <y>420</y>
-     <width>131</width>
-     <height>71</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">border:1px solid #000;
-background-color: #fff;</string>
-   </property>
-   <property name="text">
-    <string>جزئیات سفارش</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pushButton_42">
-   <property name="geometry">
-    <rect>
-     <x>260</x>
-     <y>350</y>
-     <width>131</width>
-     <height>71</height>
-    </rect>
-   </property>
-   <property name="styleSheet">
-    <string notr="true">border:1px solid #000;
-background-color: #fff;</string>
-   </property>
-   <property name="text">
-    <string>جزئیات سفارش</string>
-   </property>
-  </widget>
   <widget class="QPushButton" name="pushButton_43">
    <property name="geometry">
     <rect>
-     <x>390</x>
+     <x>320</x>
      <y>420</y>
      <width>131</width>
      <height>71</height>
@@ -513,7 +428,7 @@ background-color: #fff;</string>
   <widget class="QPushButton" name="pushButton_44">
    <property name="geometry">
     <rect>
-     <x>520</x>
+     <x>450</x>
      <y>420</y>
      <width>131</width>
      <height>71</height>
@@ -530,7 +445,7 @@ background-color: #fff;</string>
   <widget class="QPushButton" name="pushButton_45">
    <property name="geometry">
     <rect>
-     <x>890</x>
+     <x>820</x>
      <y>350</y>
      <width>81</width>
      <height>71</height>
@@ -547,7 +462,7 @@ background-color: #fff;</string>
   <widget class="QPushButton" name="pushButton_7">
    <property name="geometry">
     <rect>
-     <x>130</x>
+     <x>190</x>
      <y>140</y>
      <width>131</width>
      <height>71</height>
@@ -564,7 +479,7 @@ background-color: rgb(191, 204, 203);</string>
   <widget class="QLabel" name="label_2">
    <property name="geometry">
     <rect>
-     <x>200</x>
+     <x>260</x>
      <y>220</y>
      <width>51</width>
      <height>41</height>
@@ -580,7 +495,7 @@ background-color: rgb(191, 204, 203);</string>
   <widget class="QLabel" name="label_3">
    <property name="geometry">
     <rect>
-     <x>140</x>
+     <x>200</x>
      <y>220</y>
      <width>51</width>
      <height>41</height>
@@ -596,7 +511,7 @@ background-color: rgb(191, 204, 203);</string>
   <widget class="QLabel" name="label_4">
    <property name="geometry">
     <rect>
-     <x>140</x>
+     <x>200</x>
      <y>290</y>
      <width>51</width>
      <height>41</height>
@@ -612,7 +527,7 @@ background-color: rgb(191, 204, 203);</string>
   <widget class="QLabel" name="label_5">
    <property name="geometry">
     <rect>
-     <x>200</x>
+     <x>260</x>
      <y>290</y>
      <width>51</width>
      <height>41</height>
@@ -628,7 +543,7 @@ background-color: rgb(191, 204, 203);</string>
   <widget class="QLabel" name="label_6">
    <property name="geometry">
     <rect>
-     <x>140</x>
+     <x>200</x>
      <y>360</y>
      <width>51</width>
      <height>41</height>
@@ -644,7 +559,7 @@ background-color: rgb(191, 204, 203);</string>
   <widget class="QLabel" name="label_7">
    <property name="geometry">
     <rect>
-     <x>200</x>
+     <x>260</x>
      <y>360</y>
      <width>51</width>
      <height>41</height>
@@ -660,7 +575,7 @@ background-color: rgb(191, 204, 203);</string>
   <widget class="QLabel" name="label_8">
    <property name="geometry">
     <rect>
-     <x>140</x>
+     <x>200</x>
      <y>430</y>
      <width>51</width>
      <height>41</height>
@@ -676,7 +591,7 @@ background-color: rgb(191, 204, 203);</string>
   <widget class="QLabel" name="label_9">
    <property name="geometry">
     <rect>
-     <x>200</x>
+     <x>260</x>
      <y>430</y>
      <width>51</width>
      <height>41</height>
@@ -703,6 +618,24 @@ background-color: rgb(191, 204, 203);</string>
    </property>
    <property name="pixmap">
     <pixmap>../Tools/imgs/refresh_btn.jpg</pixmap>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_6">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>220</y>
+     <width>911</width>
+     <height>501</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font: 20pt &quot;B Nazanin&quot;;
+background-color : transparent;
+border : 1px solid #000;</string>
+   </property>
+   <property name="text">
+    <string>هنوز سفارش جدیدی ثبت نشده است</string>
    </property>
   </widget>
  </widget>

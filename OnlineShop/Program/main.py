@@ -1,4 +1,3 @@
-from ast import operator
 import sys,os
 from PyQt5.uic import loadUi
 from PyQt5.QtCore import Qt
@@ -289,7 +288,13 @@ class LoginWindowUI(QDialog):
         self.viewAc.edit_btn.clicked.connect(self.OpenEditAccountUI)
         self.viewAc.increaseBalance_btn.clicked.connect(self.OpenIncreaseBalanceUI)
         self.viewAc.userComments_btn.clicked.connect(self.OpenUserCommentsUI)
+        self.viewAc.factor_btn.clicked.connect(self.OpenUserOrdersUI)
         
+        
+    def OpenUserOrdersUI(self):
+        self.userOrderUI = usersOrderUI()
+        self.userOrderUI.createDynamicInfo(self.UserID)
+        self.userOrderUI.show()
     
     def goToExitAccount(self):
         # --- exit account ---
@@ -670,10 +675,21 @@ class operatorPanelUI(QDialog):
         self.viewUsers_btn.clicked.connect(self.OpenViewUsersDetailsUI)
         self.viewProducts_btn.clicked.connect(self.OpenViewProductsDetailsUI)
         self.viewCats_btn.clicked.connect(self.OpenViewCatUI)
+        self.viewUsersShopCart_btn.clicked.connect(self.OpenViewHandelOrdersUI)
+        self.viewDiscount_btn.clicked.connect(self.OpenViewDiscountsUI)
+                    
         
     def HandelOperatorPanel_func(self,OperatorID,AllInfo):
         self.OperatorID = OperatorID
         self.AllOperatorInfo = AllInfo
+        
+    def OpenViewDiscountsUI(self):
+        self.viewDiscounts = viewDiscountUI()
+        self.viewDiscounts.show()
+        
+    def OpenViewHandelOrdersUI(self):
+        self.viewOperatorHandelOrders = operatorHandelOrdersUI()
+        self.viewOperatorHandelOrders.show()   
         
     def goToHomePageUI(self):
         self.close()
@@ -763,6 +779,10 @@ class viewAllUserDetailsUI(QDialog):
     def OpenViewAccountUI(self,objName):
         userID = objName.split("_")[1]
         self.viewAc = viewAccountUI()
+        self.viewAc.factor_btn.setHidden(True)
+        self.viewAc.userComments_btn.setHidden(True)
+        self.viewAc.label_9.setHidden(True)
+        self.viewAc.label_10.setHidden(True)
         # --- show user profile ---
         loginUser = LoginUser(userID)
         loginUser.SeeUserPanel(self.viewAc.show_userName,self.viewAc.show_email,self.viewAc.show_password,self.viewAc.show_date,self.viewAc.show_randomID,self.viewAc.show_balance)
@@ -801,7 +821,7 @@ class viewAllUserDetailsUI(QDialog):
         # ---END show user Edit profile ---
         
     def goToCloseMessageBox(self,message):
-        if(message == "LogIn" or message == "confirmBalance" or message == "ConfirmDelete"):
+        if(message == "LogIn" or message == "confirmBalance" or message == "ConfirmDelete" or message == "Edit"):
             self.message.close()
             
         
@@ -1077,7 +1097,212 @@ class editProductUI(QDialog):
     def gotoCloseConfirmEditProduct(self):
         self.message.close()
         self.close()
+        
+class usersOrderUI(QDialog):
+    def __init__(self):
+        super().__init__()
+        loadUi(os.getcwd()+"\\uiDesigns\\UserOrdersUI.ui", self)
+        self.setFixedSize(self.width(),self.height())
+        
+    def createDynamicInfo(self,userID):
+        loginUser = LoginUser(userID)
+        loginUser.SeeFactorList(self)
+        
+    def OpenDetialsOfFactorUI(self,objName):
+        findIDs = objName.split("_")[1]
+        findUserID = findIDs.split("|")[0]
+        findBuyID = findIDs.split("|")[1]
+        self.close()
+        self.viewFactor = viewFactorDetailsUI()
+        self.viewFactor.createDynamicFactor(findUserID,findBuyID)
+        self.viewFactor.back_btn.clicked.connect(self.BackToUserOrdersUI)
+        self.viewFactor.show()
+        
+    def BackToUserOrdersUI(self):
+        self.viewFactor.close()
+        self.show()
+
+class viewFactorDetailsUI(QDialog):
+    def __init__(self):
+        super().__init__()
+        loadUi(os.getcwd()+"\\uiDesigns\\viewFactorDetailsUI.ui", self)
+        self.setFixedSize(self.width(),self.height())
+        
+    def createDynamicFactor(self,userID,buyID):
+        loginUser = LoginUser(userID)
+        loginUser.seeDetailsOfFactor(buyID,self)
+
+
+class operatorHandelOrdersUI(QDialog):
+    def __init__(self):
+        super().__init__()
+        loadUi(os.getcwd()+"\\uiDesigns\\OperatorHadnelOrdersUI.ui", self)
+        self.createDynamicInfo()
+        self.setFixedSize(self.width(),self.height())
+    def createDynamicInfo(self):
+        operator = Operator()
+        operator.ConfirmUserShopCart(self)
+        
+    def goToConfrimOrder(self,objName):
+        findIDs = objName.split("_")[1]
+        userID = findIDs.split("|")[0]
+        buyID = findIDs.split("|")[1]
+        findUserName = db.userRepository.GetUserNameByID(userID)[0][0]
+        self.message = MessgaeBoxUI()
+        self.message.message_lbl.setText(f"آیا از ثبت سفارش کاربر {findUserName} مطمن هستید؟")
+        self.message.confirm_btn.setText("بله")
+        self.message.confirm_btn.clicked.connect(lambda x : self.gotoCloseConfirmOrder(userID,buyID))
+        self.message.show()
     
+    def gotoCloseConfirmOrder(self,userID,buyID):
+        operator = Operator()
+        if(operator.goToSendOrder(userID,buyID)):       
+            findUserName = db.userRepository.GetUserNameByID(userID)[0][0]
+            self.message.message_lbl.setText(f"سفارش کاربر {findUserName} با موفقیت ثبت شد و در حال ارسال قرار گرفت")
+            self.message.confirm_btn.setText("متوجه شدم")
+            self.message.confirm_btn.clicked.connect(self.closeMessageBox)
+            self.message.show()
+    
+    def goToIgnoreOrder(self,objName):
+        findIDs = objName.split("_")[1]
+        userID = findIDs.split("|")[0]
+        buyID = findIDs.split("|")[1]
+        findUserName = db.userRepository.GetUserNameByID(userID)[0][0]
+        self.message = MessgaeBoxUI()
+        self.message.message_lbl.setText(f"آیا از لغو سفارش کاربر {findUserName} مطمن هستید؟")
+        self.message.confirm_btn.setText("بله")
+        self.message.confirm_btn.clicked.connect(lambda x : self.gotoCloseIgnoreOrder(userID,buyID))
+        self.message.show()
+        
+    def gotoCloseIgnoreOrder(self,userID,buyID):
+        operator = Operator()
+        if(operator.goToIgnoreOrder(userID,buyID)):
+            findUserName = db.userRepository.GetUserNameByID(userID)[0][0]
+            self.message.message_lbl.setText(f"سفارش کاربر {findUserName} با موفقیت لغو و وجه برگشت داده شد")
+            self.message.confirm_btn.setText("متوجه شدم")
+            self.message.confirm_btn.clicked.connect(self.closeMessageBox)
+            self.message.show()
+    
+    def closeMessageBox(self):
+        self.message.close()
+        self.close()
+        self.window = operatorPanelUI()
+        self.window.show()
+
+class viewDiscountUI(QDialog):
+    def __init__(self):
+        super().__init__()
+        loadUi(os.getcwd()+"\\uiDesigns\\viewDiscountUI.ui", self)
+        self.createDynamicInfo()
+        self.setFixedSize(self.width(),self.height())
+        self.addNewOffer_btn.clicked.connect(self.OpenAddNewDiscountUI)
+        self.refresh_btn.clicked.connect(self.goToRefreshViewDiscountUI)
+        
+        
+    def goToRefreshViewDiscountUI(self):
+        self.close()
+        self.window = viewDiscountUI()
+        self.window.show()
+        
+    def OpenAddNewDiscountUI(self):
+        self.viewEditOffersUI = viewEditOffersUI()
+        self.viewEditOffersUI.label_2.setText("افزودن کد تخفیف جدید")
+        self.viewEditOffersUI.label_2.setStyleSheet("QLabel { font: 24pt 'B narm';}")
+        self.viewEditOffersUI.confirm_btn.setText("افزودن")
+        self.goToAddNewOffer()
+        self.viewEditOffersUI.show()    
+        
+    def createDynamicInfo(self):
+        operator = Operator()
+        operator.viewDiscountUI(self)
+        
+    def goToEditOffer(self,objName):
+        findOfferID = objName.split("_")[1]
+        self.close()
+        self.window = viewEditOffersUI()
+        self.window.OpenEditUI(findOfferID)
+        self.window.show()
+
+    def goToDeleteOffer(self,objName):
+        findOfferID = objName.split("_")[1]
+        self.message = MessgaeBoxUI()
+        self.message.message_lbl.setText(f"آیا از حذف این کد تخفیف مطمن هستید؟")
+        self.message.confirm_btn.setText("بله")
+        self.message.confirm_btn.clicked.connect(lambda x : self.goToConfirmDeleteOffer(findOfferID))
+        self.message.show()
+        
+    def goToConfirmDeleteOffer(self,offerID):
+        db.OffersRepository.Delete(offerID)
+        db.OffersRepository.Save()
+        self.message.close()
+        self.message = MessgaeBoxUI()
+        self.message.message_lbl.setText(f"کد تخفیف با موفقیت پاک شد")
+        self.message.confirm_btn.setText("بستن")
+        self.message.confirm_btn.clicked.connect(lambda x : self.goToCloseMessageBox("DeleteOffer"))
+        self.message.show()
+        
+    def goToAddNewOffer(self):
+        self.viewEditOffersUI.confirm_btn.clicked.connect(self.confirmAddNewOffer)
+        
+    def confirmAddNewOffer(self):
+        operator = Operator()
+        if(operator.AddNewOffer(self.viewEditOffersUI)):
+            self.message = MessgaeBoxUI()
+            self.message.message_lbl.setText(f"کد تخفیف جدید با موفقیت افزوده شد")
+            self.message.confirm_btn.setText("متوجه شدم")
+            self.message.confirm_btn.clicked.connect(lambda x : self.goToCloseMessageBox("create"))
+            self.message.show()
+        else:
+            self.message = MessgaeBoxUI()
+            self.message.message_lbl.setText(f"لطفا همه مقادیر را کامل کنید")
+            self.message.confirm_btn.setText("متوجه شدم")
+            self.message.confirm_btn.clicked.connect(lambda x : self.goToCloseMessageBox("wrong"))
+            self.message.show()
+        
+    def goToCloseMessageBox(self,message):
+        if(message == "DeleteOffer"):
+            self.message.close()
+            self.close()
+            self.window = viewDiscountUI()
+            self.window.show()
+        elif(message == "create"):
+            self.message.close()
+            self.close()
+            self.viewEditOffersUI.close()
+            self.window = viewDiscountUI()
+            self.window.show()
+        elif(message =="wrong"):
+            self.message.close()
+
+class viewEditOffersUI(QDialog):
+    def __init__(self):
+        super().__init__()
+        loadUi(os.getcwd()+"\\uiDesigns\\EditOfferUI.ui", self)
+        self.setFixedSize(self.width(),self.height())
+        
+    def OpenEditUI(self,offerID):
+        findOffName = db.OffersRepository.GetCodeNameBYID(offerID)[0][0]
+        findDiscount = db.OffersRepository.GetDiscountBYID(offerID)[0][0]
+        self.offer_input.setText(f"{findOffName}")
+        self.discount_input.setText(f"{findDiscount}")
+        self.confirm_btn.clicked.connect(lambda x : self.goToConfirmEditOffers(offerID))
+        
+    def goToConfirmEditOffers(self,offerID):
+        operator = Operator()
+        if(operator.ConfirmEditOffer(offerID,self)):
+            self.message = MessgaeBoxUI()
+            self.message.message_lbl.setText(f"کد تخفیف با موفقیت ویرایش شد")
+            self.message.confirm_btn.setText("متوجه شدم")
+            self.message.confirm_btn.clicked.connect(lambda x : self.closeMessageBox("edit"))
+            self.message.show()
+            
+            
+    def closeMessageBox(self,message):
+        if(message == "edit"):
+            self.message.close()
+            self.close()
+            self.window = viewDiscountUI()
+            self.window.show()
             
 app = QApplication(sys.argv)
 mainUI = mainWindowUI()

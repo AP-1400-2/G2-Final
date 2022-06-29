@@ -16,6 +16,18 @@ class UserPaymentRepository(IUserPaymentRepository):
     def GetByUserID(self,userID):
         return self.db.getData(f"SELECT * FROM usersPayment WHERE userID = {userID}")
     
+    def GetAllByUserAndBuyID(self,userID,buyID):
+        return self.db.getData(f"SELECT * FROM usersPayment WHERE userID = {userID} AND buyID = {buyID}")
+    
+    def GetNameByUserAndBuyID(self,userID,buyID):
+        return self.db.getData(f"SELECT userName FROM usersPayment WHERE userID = {userID} AND buyID = {buyID}")
+    
+    def GetFamilyByUserAndBuyID(self,userID,buyID):
+        return self.db.getData(f"SELECT userFamily FROM usersPayment WHERE userID = {userID} AND buyID = {buyID}")
+    
+    def GetTotalPriceByUserAndBuyID(self,userID,buyID):
+        return self.db.getData(f"SELECT TotalPrice FROM usersPayment WHERE userID = {userID} AND buyID = {buyID}")
+    
     def Create(self,userPayment):
         self.db.runQuery("INSERT INTO usersPayment VALUES (NULL, ?, ?, ? ,?, ?, ?, ?, ?, ?, ?);", userPayment.values())
         

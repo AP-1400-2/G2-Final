@@ -14,6 +14,8 @@ from DataLayer.Services.AllCommentsRepository import AllcommentsRepository
 from DataLayer.Services.UserPaymentRepository import UserPaymentRepository
 from DataLayer.Services.ShopCartAfterPeymentRepository import ShopCartAfterPeymentRepository
 from DataLayer.Services.CatRepository import CatRepository
+from DataLayer.Services.OperatorConfrimOrderRepository import OperatorConfirmOrderRepository
+
 
 class context:
     def __init__(self):
@@ -30,6 +32,7 @@ class context:
         self._ShopCartAfterPeymentRepository = None
         self._OperatorRepository = None
         self._CatRepository = None
+        self._OperatorConfirmOrderRepository = None
         
     @property
     def userRepository(self):
@@ -94,4 +97,9 @@ class context:
             self._CatRepository = CatRepository(self.db)
         return self._CatRepository
     
-            
+    @property
+    def OperatorConfirmOrderRepository(self):
+        if self._OperatorConfirmOrderRepository is None:
+            self._OperatorConfirmOrderRepository = OperatorConfirmOrderRepository(self.db)
+        return self._OperatorConfirmOrderRepository
+    

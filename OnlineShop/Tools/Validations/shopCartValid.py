@@ -8,7 +8,7 @@ class shopCartValid:
             return 0
         elif(not self.count.isdigit()):
             return 1
-        elif(self.count != "" and int(self.count) == 0):
+        elif(self.count.isdigit() and int(self.count) == 0):
             return 0
         elif(self.discount != ""):
             checkDiscount = self.db.OffersRepository.GetAllByCode(self.discount)

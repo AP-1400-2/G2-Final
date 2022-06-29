@@ -13,6 +13,9 @@ class ShopCartAfterPeymentRepository(IShopCartAfterPeymentRepository):
     def GetByID(self,id):
         pass
     
+    def GetAllByUserAndBuyID(self,userID,buyID):
+        return self.db.getData(f"SELECT * FROM shopCartAfterPeyment WHERE userID = {userID} AND buyID = {buyID}")
+    
     def GetALLByUserID(self,userID):
         return self.db.getData(f"SELECT * FROM shopCartAfterPeyment WHERE userID = {userID}")
     

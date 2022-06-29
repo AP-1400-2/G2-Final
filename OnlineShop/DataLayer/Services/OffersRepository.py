@@ -24,11 +24,15 @@ class OffersRepository(IOffersRepository):
     def GetDiscountBYID(self,id):
         return self.db.getData(f"SELECT discount FROM offers WHERE id = {id}")
     
-    def Create(self,off):
-        pass
-    def Update(self,off,id):
-        pass
+    def Create(self,offName,discount):
+        self.db.runQueryWithOutInstance(f"INSERT INTO offers VALUES (NULL,'{offName}', '{discount}' );")
+    
+    def Update(self,id,offercode,discount):
+        self.db.runQueryWithOutInstance(f"UPDATE offers SET offerCode = '{offercode}' , discount = '{discount}'  WHERE id = {id} ")
+    
+    
     def Delete(self,id):
-        pass
+        self.db.runQueryWithOutInstance(f"DELETE FROM offers WHERE id = {id} ")
+    
     def Save(self):
-        pass
+        return self.db.commit()

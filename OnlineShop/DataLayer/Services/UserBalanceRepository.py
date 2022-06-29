@@ -15,6 +15,9 @@ class UserBalanceRepository(IUserBalanceRepository):
     
     def Update(self,userBalance):
         self.db.runQuery(f"UPDATE users_Balance SET Balance = ? WHERE userId = ? ", tuple(reversed(userBalance.values())))
+        
+    def UpdateWithOutInstance(self,userID,amount):
+        self.db.runQueryWithOutInstance(f"UPDATE users_Balance SET Balance = {amount} where userID = '{userID}'")
     
     def Delete(self,id):
         self.db.runQuery(f"DELETE FROM users_Balance WHERE id = {id}")

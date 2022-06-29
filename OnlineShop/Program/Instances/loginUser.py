@@ -259,7 +259,7 @@ class LoginUser:
         instance.veiwProduct.viewComments_btn.setHidden(True)
         instance.veiwProduct.allComments_lbl.setHidden(True)
         product = Product(productID)
-        product.showDetails(instance.veiwProduct.productName_lbl,instance.veiwProduct.show_productID,instance.veiwProduct.show_details,instance.veiwProduct.show_price,instance.veiwProduct.show_date,instance.veiwProduct.show_salerName)  
+        product.showDetails(instance.veiwProduct.productName_lbl,instance.veiwProduct.show_productID,instance.veiwProduct.show_details,instance.veiwProduct.show_price,instance.veiwProduct.show_date,instance.veiwProduct.show_salerName,instance.veiwProduct.show_cat)  
     
     def AddItemToShopCart(self,product_id,user_id,count,discount,instance):
         validation = shopCartValid(count,discount,db).validate()
@@ -290,7 +290,8 @@ class LoginUser:
             if(discount != ""):
                 find_DiscountID = db.OffersRepository.GetIdByCode(discount)[0][0]
                 discountID = find_DiscountID
-            newShopCart = shopCartTable(product_id,user_id,None,int(count),discountID)
+            findSalerID = db.ProductsRepository.GetSalerIDByID(product_id)[0][0]
+            newShopCart = shopCartTable(product_id,user_id,findSalerID,int(count),discountID)
             if(checkShopCart != []):
                 for i in checkShopCart:
                     if((product_id,user_id) == i[1:3]):
@@ -502,12 +503,17 @@ class LoginUser:
                 self.buyID = db.ShopCartAfterPeymentRepository.GetBuyIDByUserID(userID)[0][0] + 1
             # --- create buydID ---
             
-        # --- Add To ShopCart After Peyment Table ---
+            # --- Add To ShopCart After Peyment Table ---
             for item in user_shopCart_list:
                 NewShopCartAfterPey =  shopCartAfterPeymentTable(self.buyID,item[1],item[2],item[3],item[4],item[5])
                 db.ShopCartAfterPeymentRepository.Create(NewShopCartAfterPey)
                 db.ShopCartAfterPeymentRepository.Save()
-        # --- Add To ShopCartAfterPeyment Table ---
+            # --- Add To ShopCartAfterPeyment Table ---
+            
+            # --- Add To this order to operator Panel ---
+            db.OperatorConfirmOrderRepository.Create(self.userID,self.buyID)
+            db.OperatorConfirmOrderRepository.Save()
+            # --- Add To this order to operator Panel ---
             
             # --- save userPayment ---
             newUserPeyment= userPaymentTable(userID,self.buyID,nameInput,familyInput,mobileInput,addressInput,stateInput,cityInput,totalPrice,datetime.date(datetime.now()))
@@ -589,6 +595,219 @@ class LoginUser:
             db.userRepository.Save()
             return True
         
-    def SeeFactorList(self):
-        pass
-    
+    def SeeFactorList(self,instance):
+        findAlluserPayment = db.UserPaymentRepository.GetByUserID(self.userID)
+        instance.orderCount_lbl.setText(f"تعداد سفارش ها : {len(findAlluserPayment)}")
+        radif_dict = {}
+        nameAndFamily_dict = {}
+        orderID_dict = {}
+        price_dict = {}
+        date_dict = {}
+        Details_dict = {}
+        status_dict = {}
+        height = 230
+        index = 0
+        for i in findAlluserPayment:
+            paymentID = i[0]
+            userID = i[1]
+            buyID = i[2]
+            userShortName = i[3]
+            userFamily = i[4]
+            totalPrice = i[9]
+            date = i[10]
+            
+            checkOrderStatus = db.OperatorConfirmOrderRepository.CheckOrderStatus(userID,buyID)[0][0]
+            
+            # ---- createDynamic ----
+            radif_dict[index] = QPushButton(instance)
+            radif_dict[index].setText(f"{index}")
+            radif_dict[index].setStyleSheet("QPushButton {background-color : #fff ; border:1px solid #000;}")
+            radif_dict[index].setGeometry(940,height,81,71)
+            radif_dict[index].setObjectName(f"radif_{userID}|{buyID}")
+            # -------
+            nameAndFamily_dict[index] = QPushButton(instance)
+            nameAndFamily_dict[index].setText(f"{userShortName} {userFamily}")
+            nameAndFamily_dict[index].setStyleSheet("QPushButton {background-color : #fff ; border:1px solid #000;}")
+            nameAndFamily_dict[index].setGeometry(820,height,121,71)
+            nameAndFamily_dict[index].setObjectName(f"userNameAndFamily_{userID}|{buyID}")
+            # -------
+            orderID_dict[index] = QPushButton(instance)
+            orderID_dict[index].setText(f"{buyID}")
+            orderID_dict[index].setStyleSheet("QPushButton {background-color : #fff ; border:1px solid #000;}")
+            orderID_dict[index].setGeometry(690,height,131,71)
+            orderID_dict[index].setObjectName(f"buyID_{userID}|{buyID}")
+            # -------
+            price_dict[index] = QPushButton(instance)
+            price_dict[index].setText(f"{totalPrice}")
+            price_dict[index].setStyleSheet("QPushButton {background-color : #fff ; border:1px solid #000;}")
+            price_dict[index].setGeometry(560,height,131,71)
+            price_dict[index].setObjectName(f"PriceDict_{userID}|{buyID}")
+            # -------
+            date_dict[index] = QPushButton(instance)
+            date_dict[index].setText(f"{date}")
+            date_dict[index].setStyleSheet("QPushButton {background-color : #fff ; border:1px solid #000;}")
+            date_dict[index].setGeometry(440,height,121,71)
+            date_dict[index].setObjectName(f"Email_{userID}|{buyID}")
+            # -------
+            Details_dict[index] = QPushButton(instance)
+            Details_dict[index].setText(f"جزئییات")
+            Details_dict[index].setStyleSheet("QPushButton {background-color : #fff ; border:1px solid #000;font: bold 10pt 'B Nazanin';}")
+            Details_dict[index].setGeometry(320,height,121,71)
+            Details_dict[index].setObjectName(f"Details_{userID}|{buyID}")
+            Details_dict[index].setCursor(Qt.PointingHandCursor)
+            # -------
+            status_dict[index] = QPushButton(instance)
+            if(checkOrderStatus == 0):
+                status_dict[index].setText(f"درحال برسی")
+                status_dict[index].setStyleSheet("QPushButton {background-color : #fff ; border:1px solid #000; color : #000 ; font: bold 10pt 'B Nazanin';}")
+                status_dict[index].setGeometry(50,height,271,71)
+                status_dict[index].setObjectName(f"Status_{userID}|{buyID}")
+            elif(checkOrderStatus == 1):
+                status_dict[index].setText(f"تایید شده - درحال ارسال")
+                status_dict[index].setStyleSheet("QPushButton {background-color : #fff ; border:1px solid #000; color : green; font: bold 10pt 'B Nazanin';}")
+                status_dict[index].setGeometry(50,height,271,71)
+                status_dict[index].setObjectName(f"Status_{userID}|{buyID}")   
+            else:
+                status_dict[index].setText(f"لغو شده - برگشت وجه")
+                status_dict[index].setStyleSheet("QPushButton {background-color : #fff ; border:1px solid #000; color : red; font: bold 10pt 'B Nazanin';}")
+                status_dict[index].setGeometry(50,height,271,71)
+                status_dict[index].setObjectName(f"Status_{userID}|{buyID}")   
+            
+            # -----
+            index += 1
+            height += 70
+
+            num = len(Details_dict)
+            for i in range(num,20):
+                Details_dict[i] = QPushButton(instance)
+                Details_dict[i].setHidden(True)
+                
+            Details_dict[0].clicked.connect(lambda: instance.OpenDetialsOfFactorUI(Details_dict[0].objectName()))
+            Details_dict[1].clicked.connect(lambda: instance.OpenDetialsOfFactorUI(Details_dict[1].objectName()))
+            Details_dict[2].clicked.connect(lambda: instance.OpenDetialsOfFactorUI(Details_dict[2].objectName()))
+            Details_dict[3].clicked.connect(lambda: instance.OpenDetialsOfFactorUI(Details_dict[3].objectName()))
+            Details_dict[4].clicked.connect(lambda: instance.OpenDetialsOfFactorUI(Details_dict[4].objectName()))
+            Details_dict[5].clicked.connect(lambda: instance.OpenDetialsOfFactorUI(Details_dict[5].objectName()))
+            Details_dict[6].clicked.connect(lambda: instance.OpenDetialsOfFactorUI(Details_dict[6].objectName()))
+            Details_dict[7].clicked.connect(lambda: instance.OpenDetialsOfFactorUI(Details_dict[7].objectName()))
+            Details_dict[8].clicked.connect(lambda: instance.OpenDetialsOfFactorUI(Details_dict[8].objectName()))
+            Details_dict[9].clicked.connect(lambda: instance.OpenDetialsOfFactorUI(Details_dict[9].objectName()))
+            Details_dict[10].clicked.connect(lambda: instance.OpenDetialsOfFactorUI(Details_dict[10].objectName()))
+            
+    def seeDetailsOfFactor(self,BuyID,instance):
+        findAlluserPayment = db.UserPaymentRepository.GetAllByUserAndBuyID(self.userID,BuyID)
+        
+        findAllShopCartAfterPayment = db.ShopCartAfterPeymentRepository.GetAllByUserAndBuyID(self.userID , BuyID)
+        
+        for i in findAlluserPayment:
+            paymentID = i[0]
+            userID = i[1]
+            buyID = i[2]
+            userShortName = i[3]
+            userFamily = i[4]
+            mobile = i[5]
+            Address = i[6]
+            state = i[7]
+            city = i[8]
+            totalPrice = i[9]
+            date = i[10]
+        instance.orderName_lbl.setText(f"سفارش به نام : {userShortName} {userFamily}")
+        instance.mobile_lbl.setText(f"شماره تماس : {mobile}")
+        instance.count_lbl.setText(f"تعداد لیست : {len(findAllShopCartAfterPayment)}")
+        instance.factorIndex_lbl.setText(f"شماره فاکتور : {buyID}")
+        instance.date_lbl.setText(f"تاریخ سفارش : {date}")
+        instance.Adress_lbl.setText(f"{Address}")
+        instance.state_lbl.setText(f"{state}")
+        instance.city_lbl.setText(f"{city}")
+        instance.totalPrice_lbl.setText(f"هزینه نهایی : {totalPrice}")
+        
+        Radif_dict = {}
+        ProductName_dict = {}
+        RandomID_dict = {}
+        SalerName_dict = {}
+        Price_dict = {}
+        count_dict = {}
+        OffName_dict = {}
+        beforAff_dict = {}
+        AfterOff_dict = {}
+        height = 440
+        index = 0
+        
+        for i in findAllShopCartAfterPayment:
+            shopCartID = i[0]
+            _buyID = i[1]
+            productID = i[2]
+            _userID = i[3]
+            _salerID = i[4]
+            count = i[5]
+            _offID = i[6]
+            
+            findProductName = db.ProductsRepository.GetProductNameByID(productID)[0][0]
+            findProductRandomID = db.ProductsRepository.GetRandomID(productID)[0][0]
+            findProductPrice = db.ProductsRepository.GetPriceByID(productID)[0][0]
+            findSalerName = db.SalerRepository.GetSalerNameByID(_salerID)[0][0]
+            findOffName = db.OffersRepository.GetCodeNameBYID(_offID)[0][0]
+            findOffDiscount = db.OffersRepository.GetDiscountBYID(_offID)[0][0]
+            price_beforOff = count * findProductPrice
+            price_afterOff = int(price_beforOff - (price_beforOff * findOffDiscount / 100))
+            
+            # --- create Dynamics ---
+            Radif_dict[index] = QPushButton(instance)
+            Radif_dict[index].setText(f"{index}")
+            Radif_dict[index].setStyleSheet("QPushButton {background-color : #fff ; border:1px solid #000;}")
+            Radif_dict[index].setGeometry(970,height,81,71)
+            Radif_dict[index].setObjectName(f"index_{productID}")
+            # -------
+            ProductName_dict[index] = QPushButton(instance)
+            ProductName_dict[index].setText(f"{findProductName}")
+            ProductName_dict[index].setStyleSheet("QPushButton {background-color : #fff ; border:1px solid #000;}")
+            ProductName_dict[index].setGeometry(850,height,121,71)
+            ProductName_dict[index].setObjectName(f"productName_{productID}")
+            # -------
+            RandomID_dict[index] = QPushButton(instance)
+            RandomID_dict[index].setText(f"{findProductRandomID}")
+            RandomID_dict[index].setStyleSheet("QPushButton {background-color : #fff ; border:1px solid #000;}")
+            RandomID_dict[index].setGeometry(730,height,121,71)
+            RandomID_dict[index].setObjectName(f"productRandomID_{productID}")
+            # -------
+            SalerName_dict[index] = QPushButton(instance)
+            SalerName_dict[index].setText(f"{findSalerName}")
+            SalerName_dict[index].setStyleSheet("QPushButton {background-color : #fff ; border:1px solid #000;}")
+            SalerName_dict[index].setGeometry(600,height,131,71)
+            SalerName_dict[index].setObjectName(f"salerName_{productID}")
+            # -------
+            Price_dict[index] = QPushButton(instance)
+            Price_dict[index].setText(f"{findProductPrice}")
+            Price_dict[index].setStyleSheet("QPushButton {background-color : #fff ; border:1px solid #000;}")
+            Price_dict[index].setGeometry(470,height,131,71)
+            Price_dict[index].setObjectName(f"priceDict_{productID}")
+            # -------
+            count_dict[index] = QPushButton(instance)
+            count_dict[index].setText(f"{count}")
+            count_dict[index].setStyleSheet("QPushButton {background-color : #fff ; border:1px solid #000;}")
+            count_dict[index].setGeometry(380,height,91,71)
+            count_dict[index].setObjectName(f"count_{productID}")
+            # -------
+            OffName_dict[index] = QPushButton(instance)
+            OffName_dict[index].setText(f"{findOffName}")
+            OffName_dict[index].setStyleSheet("QPushButton {background-color : #fff ; border:1px solid #000;}")
+            OffName_dict[index].setGeometry(260,height,121,71)
+            OffName_dict[index].setObjectName(f"offName_{productID}")
+            # -------
+            beforAff_dict[index] = QPushButton(instance)
+            beforAff_dict[index].setText(f"{price_beforOff}")
+            beforAff_dict[index].setStyleSheet("QPushButton {background-color : #fff ; border:1px solid #000;}")
+            beforAff_dict[index].setGeometry(180,height,81,71)
+            beforAff_dict[index].setObjectName(f"priceBeforOff_{productID}")
+            # -------
+            AfterOff_dict[index] = QPushButton(instance)
+            AfterOff_dict[index].setText(f"{price_afterOff}")
+            AfterOff_dict[index].setStyleSheet("QPushButton {background-color : #fff ; border:1px solid #000;}")
+            AfterOff_dict[index].setGeometry(50,height,131,71)
+            AfterOff_dict[index].setObjectName(f"priceAfterOff_{productID}")
+            
+            index += 1
+            height += 70
+            
+            
+        
