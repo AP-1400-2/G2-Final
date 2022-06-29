@@ -1139,6 +1139,13 @@ class operatorHandelOrdersUI(QDialog):
         loadUi(os.getcwd()+"\\uiDesigns\\OperatorHadnelOrdersUI.ui", self)
         self.createDynamicInfo()
         self.setFixedSize(self.width(),self.height())
+        self.refresh_btn.clicked.connect(self.goToRefreshOnlineShop)
+        
+    def goToRefreshOnlineShop(self):
+        self.close()
+        self.window = operatorHandelOrdersUI()
+        self.window.show()
+        
     def createDynamicInfo(self):
         operator = Operator()
         operator.ConfirmUserShopCart(self)
@@ -1178,6 +1185,8 @@ class operatorHandelOrdersUI(QDialog):
         operator = Operator()
         if(operator.goToIgnoreOrder(userID,buyID)):
             findUserName = db.userRepository.GetUserNameByID(userID)[0][0]
+            self.message.close()
+            self.message = MessgaeBoxUI()
             self.message.message_lbl.setText(f"سفارش کاربر {findUserName} با موفقیت لغو و وجه برگشت داده شد")
             self.message.confirm_btn.setText("متوجه شدم")
             self.message.confirm_btn.clicked.connect(self.closeMessageBox)
@@ -1186,8 +1195,6 @@ class operatorHandelOrdersUI(QDialog):
     def closeMessageBox(self):
         self.message.close()
         self.close()
-        self.window = operatorPanelUI()
-        self.window.show()
 
 class viewDiscountUI(QDialog):
     def __init__(self):

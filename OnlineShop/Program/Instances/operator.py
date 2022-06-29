@@ -694,16 +694,13 @@ class Operator:
             ignoreStatus_btn[8].clicked.connect(lambda: instance.goToIgnoreOrder(ignoreStatus_btn[8].objectName()))
             ignoreStatus_btn[9].clicked.connect(lambda: instance.goToIgnoreOrder(ignoreStatus_btn[9].objectName()))
             ignoreStatus_btn[10].clicked.connect(lambda: instance.goToIgnoreOrder(ignoreStatus_btn[10].objectName()))
-
-
-
-                
+    
         else:
             # --->notOrderYet!
             notOrderYet = QPushButton(instance)
             notOrderYet.setText("هنوز سفارش جدیدی ثبت نشده است")
             notOrderYet.setStyleSheet("QPushButton { border:1px solid #000;background-color  : transparent; text-align:center}")
-            notOrderYet.setGeometry(110,220,911,501)
+            notOrderYet.setGeometry(110,240,911,501)
             notOrderYet.setObjectName(f"notOrderYet")
         
     def ConfrimDeleteUser(self,userID):
@@ -734,6 +731,7 @@ class Operator:
         # --------
         # restore Balance
         RestoreBalance = findTotalPrice + findUserBalance
+                
         db.userBalanceRepository.UpdateWithOutInstance(userID,RestoreBalance)
         db.userBalanceRepository.Save()
         return True
