@@ -327,6 +327,7 @@ class LoginWindowUI(QDialog):
         
     def OpenEditAccountUI(self):
         self.viewAc = editAccountUI()
+        AllUserInfo = db.userRepository.GetByID(self.UserID)
         self.viewAc.setWindowTitle("ویرایش حساب کاربری")
         self.viewAc.show()
         self.viewAc.back_btn.clicked.connect(self.OpenViewAccountUI)
@@ -335,21 +336,38 @@ class LoginWindowUI(QDialog):
         self.viewAc.notEqualPass_lbl.setHidden(True)
         self.viewAc.shouldEnterNewPass_lbl.setHidden(True)
         self.viewAc.okEdit_lbl.setHidden(True)
-        self.viewAc.edit_userName_input.setText(self.AllUserInfo[0][1])
-        self.viewAc.edit_email_input.setText(self.AllUserInfo[0][2])
+        self.viewAc.edit_userName_input.setText(AllUserInfo[0][1])
+        self.viewAc.edit_email_input.setText(AllUserInfo[0][2])
         self.viewAc.confirmEdit_btn.clicked.connect(self.goToConfirmEdit)
         
     def goToConfirmEdit(self):
         # --- show user Edit profile ---
         loginUser = LoginUser(self.UserID)
         findAllUserInfo = db.userRepository.GetByID(self.UserID)
-        if(loginUser.EditUserInformation(self.viewAc.edit_userName_input.text(),self.viewAc.edit_email_input.text(),self.viewAc.edit_oldPassword_input.text(),findAllUserInfo[0][3],self.viewAc.edit_newPassword_input.text() , self)):
-            self.viewAc.close()
+        findThisUserEmail = db.userRepository.GetEmailByID(self.UserID)[0][0]
+        findAllUserByInputEmail = db.userRepository.GetByEmail(self.viewAc.edit_email_input.text())
+        if(self.viewAc.edit_userName_input.text() != "" and self.viewAc.edit_email_input.text() != ""):
+            if((self.viewAc.edit_email_input.text() == findThisUserEmail) or (self.viewAc.edit_email_input.text() != findThisUserEmail) and (findAllUserByInputEmail == [])):
+                if(loginUser.EditUserInformation(self.viewAc.edit_userName_input.text(),self.viewAc.edit_email_input.text(),self.viewAc.edit_oldPassword_input.text(),findAllUserInfo[0][3],self.viewAc.edit_newPassword_input.text() , self)):
+                    self.viewAc.close()
+                    self.message = MessgaeBoxUI()
+                    self.message.message_lbl.setText("اطلاعات شما با موفقیت ویرایش شد")
+                    self.message.confirm_btn.setText("متوجه شدم")
+                    self.message.confirm_btn.clicked.connect(lambda x : self.goToCloseMessageBox("Edit"))
+                    self.message.show()
+            else:
+                self.message = MessgaeBoxUI()
+                self.message.message_lbl.setText("این ایمیل درحال استفاده میباشد ، لطفا ایمیل دیگری وارد نمایید")
+                self.message.confirm_btn.setText("متوجه شدم")
+                self.message.confirm_btn.clicked.connect(lambda x : self.goToCloseMessageBox("ErrorEmail"))
+                self.message.show()   
+        else:
             self.message = MessgaeBoxUI()
-            self.message.message_lbl.setText("اطلاعات شما با موفقیت ویرایش شد")
+            self.message.message_lbl.setText("لطفا همه مقادیر را وارد نمایید")
             self.message.confirm_btn.setText("متوجه شدم")
-            self.message.confirm_btn.clicked.connect(lambda x : self.goToCloseMessageBox("Edit"))
-            self.message.show()
+            self.message.confirm_btn.clicked.connect(lambda x : self.goToCloseMessageBox("FillAllInputs"))
+            self.message.show()   
+    
         # ---END show user Edit profile ---
     
     def OpenIncreaseBalanceUI(self):
@@ -375,7 +393,7 @@ class LoginWindowUI(QDialog):
         if(message == "LogIn"):
             self.message.close()
             self.OpenHomePageAferLoginUI()
-        elif(message == "Edit" or message == "confirmBalance" or message == "AddNewComment" , message == "AddToFavoritList" or message == "AddTocart"):
+        elif(message == "Edit" or message == "confirmBalance" or message == "AddNewComment" , message == "AddToFavoritList" or message == "AddTocart" or message == "ErrorEmail" or message == "FillAllInputs"):
             self.message.close()
 
 # ----| RigisterWindowUI |----

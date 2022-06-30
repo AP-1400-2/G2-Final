@@ -19,6 +19,9 @@ class UserRepository(IUserRepository):
     def GetIDByEmail(self, email):
         return self.db.getData(f"SELECT id FROM users WHERE email = '{email}'")
     
+    def GetEmailByID(self,id):
+        return self.db.getData(f"SELECT Email FROM users WHERE id = '{id}'")
+    
     def GetUserNameByID(self, id):
         return self.db.getData(f"SELECT UserName FROM users WHERE id = {id}")
 
