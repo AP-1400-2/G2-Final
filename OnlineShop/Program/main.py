@@ -1357,10 +1357,16 @@ class viewSalersUI(QDialog):
         self.createDynamicInfo()
         self.setFixedSize(self.width(),self.height())  
         self.addNewSaler_btn.clicked.connect(self.OpenAddNewSalerUI)
+        self.refresh_btn.clicked.connect(self.goToRefreshSalerUI)
         
     def createDynamicInfo(self):
         operator = Operator()
         operator.ViewSalersUI(self)
+    
+    def goToRefreshSalerUI(self):
+        self.close()
+        self.window = viewSalersUI()
+        self.window.show()
         
     def OpenAddNewSalerUI(self):
         self.viewEditSalersUI = viewEditSalersUI()
@@ -1424,15 +1430,22 @@ class viewSalersUI(QDialog):
     def goToConfirmDeleteSaler(self,findSalerID):
         self.message.close()
         operator = Operator()
-        if(operator.DeleteSaler(findSalerID)):
+        if(operator.DeleteSaler(findSalerID) == 2):
             self.message = MessgaeBoxUI()
             self.message.message_lbl.setText(f"فروشنده با موفقیت حذف شد")
             self.message.confirm_btn.setText("بستن")
             self.message.confirm_btn.clicked.connect(lambda x : self.goToCloseMessageBox("DeleteSaler"))
             self.message.show()
-        else:
+        elif(operator.DeleteSaler(findSalerID) == 0):
             self.message = MessgaeBoxUI()
-            self.message.message_lbl.setText(f"این فروشنده در حال حاظر درحال ارائه خدمات میباشد ، ابتدا محصولات وابسته به آن را ویرایش کنید")
+            self.message.message_lbl.setText(f"این فروشنده درحال حاظر در حال ارائه خدمات میباشد ، ابتدا محصولات وابسته به آن را ویرایش کنید")
+            self.message.message_lbl.setStyleSheet("QLabel { font: 15pt 'B narm';}")
+            self.message.confirm_btn.setText("بستن")
+            self.message.confirm_btn.clicked.connect(lambda x : self.goToCloseMessageBox("wrong"))
+            self.message.show()
+        elif(operator.DeleteSaler(findSalerID) == 1):
+            self.message = MessgaeBoxUI()
+            self.message.message_lbl.setText(f"از این فروشنده قبلا محصولی خریداری شده است و به ثبت رسیده است ، لذا تنها ویرایش اطلاعات آن ممکن است")
             self.message.message_lbl.setStyleSheet("QLabel { font: 15pt 'B narm';}")
             self.message.confirm_btn.setText("بستن")
             self.message.confirm_btn.clicked.connect(lambda x : self.goToCloseMessageBox("wrong"))

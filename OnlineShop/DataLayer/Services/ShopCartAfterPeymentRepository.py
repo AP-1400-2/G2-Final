@@ -22,6 +22,9 @@ class ShopCartAfterPeymentRepository(IShopCartAfterPeymentRepository):
     def GetBuyIDByUserID(self,userID):
         return self.db.getData(f"SELECT BuyID FROM shopCartAfterPeyment WHERE userID = {userID} ORDER BY BuyID DESC")
     
+    def GetAllBySalerID(self,salerID):
+        return self.db.getData(f"SELECT * FROM shopCartAfterPeyment WHERE salerID = '{salerID}' ")
+    
     def Create(self,shopCartAfterPeyment):
         self.db.runQuery("INSERT INTO shopCartAfterPeyment VALUES (NULL, ?, ?, ? ,?,?,?);", shopCartAfterPeyment.values())
     

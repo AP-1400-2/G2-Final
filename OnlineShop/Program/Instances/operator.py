@@ -960,10 +960,14 @@ class Operator:
     def DeleteSaler(self,salerID):
         findProduct = db.ProductsRepository.GetAllBySalerID(salerID)
         if(findProduct == []):
-            db.SalerRepository.DeleteWithOutInstance(salerID)
-            db.SalerRepository.Save()
-            return True
+            findOrderinShopCartAfterPeyment = db.ShopCartAfterPeymentRepository.GetAllBySalerID(salerID)
+            if(findOrderinShopCartAfterPeyment == []):
+                db.SalerRepository.DeleteWithOutInstance(salerID)
+                db.SalerRepository.Save()
+                return 2
+            else:
+                return 1
         else:
-            return False
+            return 0
     
     

@@ -747,6 +747,8 @@ class LoginUser:
             findProductPrice = db.ProductsRepository.GetPriceByID(productID)[0][0]
             findSalerName = db.SalerRepository.GetSalerNameByID(_salerID)[0][0]
             findOffName = db.OffersRepository.GetCodeNameBYID(_offID)[0][0]
+            if(findOffName == "None"):
+                findOffName = "بدون تخفیف"
             findOffDiscount = db.OffersRepository.GetDiscountBYID(_offID)[0][0]
             price_beforOff = count * findProductPrice
             price_afterOff = int(price_beforOff - (price_beforOff * findOffDiscount / 100))
